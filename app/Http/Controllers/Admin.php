@@ -60,25 +60,46 @@ class Admin extends Controller
         view('templates/footer');
     }
 
-    public function atur_produk()
+    public function atur_produk($detail = '')
     {
         if ( !session()->has('is_admin') ) {
             return redirect('/');
         }
 
+        if ($detail !== '') {
+            $productsData = ProductsModel::where('product_slug', $detail)->first();
+            $view = 'admin/produk-detail';
+            $page = [
+                [
+                    'page_link' => url('atur-produk'),
+                    'page_name' => 'Atur Produk'
+                ], [
+                    'page_link' => url('atur-produk/' . $productsData->product_slug),
+                    'page_name' => $productsData->product_name
+                ]
+            ];
+        } elseif ($detail == '') {
+            $productsData = ProductsModel::where('product_status', 1)->get();
+            $view = 'admin/produk';
+            $page = [
+                [
+                    'page_link' => url('atur-produk'),
+                    'page_name' => 'Atur Produk'
+                ]
+            ];
+        }
+
         $data = [
             'title' => 'Manajemen Produk',
-            'status' => 'manajemen_produk'
+            'status' => 'manajemen_produk',
+            'page' => $page
         ];
-
-        $productsData = ProductsModel::where('product_status', 1)->get();
-
 
         return
         view('templates/header', $data) . 
         view('templates/sidebar-admin') .
         view('templates/navbar-admin', $data) .
-        view('admin/produk', [
+        view($view, [
             'products' => $productsData,
         ]) . 
         view('templates/footbar-admin') . 

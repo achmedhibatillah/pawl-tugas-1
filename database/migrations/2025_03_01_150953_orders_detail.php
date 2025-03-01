@@ -15,6 +15,7 @@ return new class extends Migration
             $table->integer('od_id')->primary();
             $table->integer('order_id');
             $table->integer('product_id');
+            $table->integer('od_qty');
 
             $table->foreign('order_id')->references('order_id')->on('orders');
             $table->foreign('product_id')->references('product_id')->on('products');

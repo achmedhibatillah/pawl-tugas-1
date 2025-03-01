@@ -31,7 +31,6 @@
 
 .border-none { border: none !important; }
 .border-clr1 { border: 1px solid var(--clr1); }
-.border-clr1-3 { border: 3px solid var(--clr1); }
 .border-clr2 { border: 1px solid var(--clr2); }
 .border-clr3 { border: 1px solid var(--clr3); }
 .border-clr4 { border: 1px solid var(--clr4); }
@@ -83,6 +82,7 @@
 .td-none { text-decoration: none !important; }
 .no-select { user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; cursor: default; }
 
+.square { aspect-ratio:1/1; }
 .text-justify { text-align: justify; }
 
 .is-invalid { border: 0.8px solid #ffffff; box-shadow: 0 0 0 0.3px #e2574e; }

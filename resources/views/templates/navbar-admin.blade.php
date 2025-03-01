@@ -16,6 +16,18 @@
     </div>
 </div>
 
+<div class="row m-0 px-4 py-2 bg-clr1">
+    <div class="d-inline-flex align-items-center">
+        <span class="text-clr3 ms-2"><a href="{{ url('dashboard-admin') }}" class="text-clr3"><i class="fas fa-home text-clr3"></i></a></span>
+        @if(isset($page))
+        @foreach($page as $x)
+            <span class="text-light ms-2"><i class="text-clr3 mx-3">&gt;</i> <a href="{{ $x['page_link'] }}" class="text-clr3 td-none">{{ $x['page_name'] }}</a></span>
+        @endforeach
+        @endif
+    </div>
+</div>
+
+
 <style>
 .dropdown-toggle::after {
     display: none !important;

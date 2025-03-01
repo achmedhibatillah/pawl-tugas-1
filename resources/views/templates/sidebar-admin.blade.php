@@ -61,4 +61,4 @@
             </div>
         </div>
     </div>
-    <div class="col-md-9 col-lg-10 m-0 p-0 overflow-scroll">
+    <div class="col-md-9 col-lg-10 m-0 p-0 overflow-scroll pb-5" style="height:100vh;">
