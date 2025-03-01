@@ -7,6 +7,7 @@ use App\Http\Kernel;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Authentication;
+use App\Http\Controllers\Products;
 
 Route::get('/', [Home::class, 'index']);
 
@@ -18,4 +19,7 @@ Route::post('logout', [Authentication::class, 'logout']);
 
 Route::get('dashboard-admin', [Admin::class, 'index']);
 Route::get('atur-orderan', [Admin::class, 'atur_orderan']);
+
 Route::get('atur-produk', [Admin::class, 'atur_produk']);
+Route::post('tambah-produk', [Products::class, 'add']);
+Route::post('hapus-produk', [Products::class, 'delete']);

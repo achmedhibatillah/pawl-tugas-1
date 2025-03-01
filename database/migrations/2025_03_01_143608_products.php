@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('product_name', 255)->nullable(false);
             $table->bigInteger('product_price')->nullable(false);
             $table->string('product_photo', 255);
+            $table->boolean('product_status');
             $table->timestamps();
         });
     }
