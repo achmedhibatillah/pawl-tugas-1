@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductsModel;
 use App\Models\CustomersModel;
+use App\Models\OrdersModel;
+use App\Models\OrdersDetailModel;
 
 class Home extends Controller
 {
@@ -33,8 +35,6 @@ class Home extends Controller
             'ses'=> $this->ses()
         ];
 
-        // dd(session()->get('cart'));
-
         $productsData = ProductsModel::where('product_status', 1);
     
         if ($request->has('k') && !empty($request->k)) {
@@ -51,28 +51,25 @@ class Home extends Controller
         }
 
         $cart = null;
+        $total_price = 0;
         if (session()->has('cart')) {
             $cartSession = session()->get('cart');
         
-            // Pastikan $cartSession adalah array satu dimensi berisi ID produk (integer atau string)
             if (is_array($cartSession)) {
-                $cartSession = array_filter($cartSession, fn($id) => is_numeric($id)); // Buang nilai non-numerik
+                $cartSession = array_filter($cartSession, fn($id) => is_numeric($id));
                 
-                $cartCount = array_count_values($cartSession); // Hitung jumlah produk berdasarkan ID
+                $cartCount = array_count_values($cartSession);
         
                 $cart = $productsData->whereIn('product_id', array_keys($cartCount))->map(function ($product) use ($cartCount) {
-                    $product->qty = $cartCount[$product->product_id] ?? 1; // Tambahkan qty berdasarkan jumlah kemunculan
+                    $product->qty = $cartCount[$product->product_id] ?? 1;
                     return $product;
                 });
             }
 
-            $total_price = 0;
             foreach($cart as $x) {
                 $total_price += $x->product_price * $x->qty;
             }
         }
-
-        // dd($cart);
             
         return 
         view('templates/header') . 
@@ -84,7 +81,31 @@ class Home extends Controller
             'k' => $request->k
         ]) . 
         view('templates/footer');
-    }  
+    }
+
+    public function pesanan() 
+    {
+        $data = [
+            'status' => 'pesanan',
+            'ses'=> $this->ses()
+        ];
+
+        $customerData = $this->ses();
+        $productsData = ProductsModel::where('product_status', 1)->get();
+        $ordersData = OrdersModel::where('customer_id', $customerData->customer_id)
+        ->where('order_status', 0)
+        ->with(['details.product'])
+        ->get();
+
+        return
+        view('templates/header') . 
+        view('templates/navbar-guest', $data) .
+        view('home/pesanan', [
+            'products' => $productsData,
+            'orders' => $ordersData,
+        ]) . 
+        view('templates/footer');
+    }
     
     public function ses()
     {

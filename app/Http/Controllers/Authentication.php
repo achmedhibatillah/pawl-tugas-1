@@ -47,7 +47,11 @@ class Authentication extends Controller
                 'customer_id' => $customer->customer_id,
             ]);
     
-            return redirect()->to('dashboard')->with('success', 'Login berhasil!');
+            $redirect = 'dashboard';
+            if(session()->has('page-menu')) {
+                $redirect = 'menu';
+            }
+            return redirect()->to($redirect)->with('info-auth', 'Registrasi berhasil dilakukan, silakan login dengan akun yang baru Anda buat.');
         }
     
         return back()->with('errors-auth', 'Autentikasi gagal, ulangi lagi.')->withInput();
@@ -92,9 +96,8 @@ class Authentication extends Controller
 
         CustomersModel::create($data);
 
-        return redirect()->to('login')->with('success-auth', 'Registrasi berhasil! Silakan login.');
+        return redirect()->to('login')->with('info-auth', 'Registrasi berhasil dilakukan, silakan login dengan akun yang baru Anda buat.');
     }
-
 
     public function login_admin()
     {
@@ -131,5 +134,11 @@ class Authentication extends Controller
         $request->session()->regenerateToken();
      
         return redirect('/');
+    }
+
+    public function destroy()
+    {
+        session()->flush();
+        return redirect()->back();
     }
 }

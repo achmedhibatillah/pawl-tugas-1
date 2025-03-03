@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function(Blueprint $table){
             $table->integer('order_id')->primary();
+            $table->boolean('order_status');
             $table->bigInteger('order_total')->nullable(false);
             $table->integer('customer_id');
             $table->timestamps();

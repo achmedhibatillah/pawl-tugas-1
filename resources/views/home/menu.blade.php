@@ -22,7 +22,11 @@
         <div class="col-md-4 col-lg-3 m-0 p-0 ps-3">
             <div class="text-clr1" style="padding: 70px 0;min-height:100vh;">
                 <div class="card bg-clr5 text-clr2 px-4 py-3 shadow-m mb-2">
+                    @if(session()->has('is_user'))
+                    <p class="m-0 text-center fw-bold">Anda telah login.</p>
+                    @else
                     <p class="m-0 text-center ">Saat ini Anda belum login. <a href="{{ url('login') }}" class="text-clr3">Login di sini</a> <i class="fas fa-user text-clr3"></i> untuk memesan menu.</p>
+                    @endif
                 </div>
                 <div class="card bg-clr3 text-clr1 px-4 py-3 shadow-m mb-2">
                     <p class="m-0">Silakan klik menu di samping untuk melakukan pemesanan.</p>

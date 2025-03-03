@@ -2,9 +2,9 @@
     <div class="row m-0 p-0 justify-content-center">
         <div class="col-10 col-md-6 col-lg-3 m-0 p-0 d-flex justify-content-center align-items-center" style="padding:100px 0;min-height:100vh;">
             <div class="">
-                @if (session('success-auth'))
+                @if (session('info-auth'))
                 <div class="card bg-transparent m-0 p-0 w-100 border-clr1 px-3 py-4 mb-3 position-relative" id="notif-flash">
-                    <p class="text-clr1 m-0 mx-3 text-center">Registrasi berhasil dilakukan, silakan login dengan akun yang baru Anda buat.</p>
+                    <p class="text-clr1 m-0 mx-3 text-center">{{ session('info-auth') }}</p>
                     <button class="btn btn-transparent btn-sm text-clr1 position-absolute translate-right-top m-0" style="top:12px;right:10px;" id="close-flash"><i class="fas fa-times"></i></button>
                 </div>
                 @endif

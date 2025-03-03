@@ -14,8 +14,8 @@
             <div class="col-5 m-0 p-0 d-flex align-items-center">
                 <div class="">
                     <p class="m-0 fw-bold">{{ $x->product_name }}</p>
-                    <p class="m-0">Rp. {{ number_format($x->product_price, 2, ',', '.') }}</p>
-                    <p class="m-0">x {{ $x->qty }} = Rp. {{ number_format($x->product_price * $x->qty, 2, ',', '.') }}</p>
+                    <!-- <p class="m-0 text-secondary">Rp. {{ number_format($x->product_price, 2, ',', '.') }}</p> -->
+                    <p class="m-0">Rp. {{ number_format($x->product_price * $x->qty, 2, ',', '.') }}</p>
                 </div>
             </div>
             <div class="col-3 m-0 p-0 d-flex justify-content-center align-items-center">
@@ -39,7 +39,7 @@
     </div>
     @endforeach
     <p class="m-0">Total : Rp. {{ number_format($total_price, 2, ',', '.') }}</p>
-    <a href="" class="btn btn-clr1 mt-2">Pesan sekarang</a>
+    <a href="{{ url('pesan-keranjang') }}" class="btn btn-clr1 mt-2">Pesan sekarang</a>
     @else
     <p class="text-center m-0">Keranjang Anda masih kosong.</p>
     @endif

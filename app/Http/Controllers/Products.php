@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Logic;
-
+use App\Http\Resources\ProductsResource;
 use App\Models\ProductsModel;
+use App\Models\OrdersModel;
+use App\Models\OrdersDetailModel;
 
 use Illuminate\Support\Str;
 
@@ -107,7 +109,6 @@ class Products extends Controller
             $filePath = $product->product_photo; // Gunakan foto lama jika tidak ada yang diunggah
         }
     
-        // Update data produk
         $product->update([
             'product_name' => $request->product_name,
             'product_slug' => $slug,
@@ -117,7 +118,6 @@ class Products extends Controller
     
         return redirect()->to('atur-produk/' . $slug)->with('success', 'Produk berhasil diperbarui.');
     }
-    
 
     public function delete(Request $request)
     {
@@ -128,5 +128,71 @@ class Products extends Controller
         ProductsModel::where('product_id', $request->product_id)->update($data);
 
         return redirect()->to('atur-produk');
+    }
+
+    public function pilih_produk($product_id)
+    {
+        if(!(session()->has('is_user'))) {
+            session(['page-menu' => true]);
+            return redirect()->to('login')->with('info-auth', 'Silakan login terlebih dahulu sebelum melakukan pemesanan.');
+        }
+
+        $cart = session()->get('cart', []);
+    
+        $cart[] = $product_id;
+    
+        session(['cart' => $cart]);
+    
+        return back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+    }
+
+    public function kurang_produk($product_id)
+    {
+        if(!(session()->has('is_user'))) {
+            return redirect()->to('login')->with('info-auth', 'Silakan login terlebih dahulu sebelum melakukan pemesanan.');
+        }
+
+        $cart = session()->get('cart', []);
+
+        if (($key = array_search($product_id, $cart)) !== false) {
+            unset($cart[$key]);
+        }
+
+        $cart = array_values($cart);
+
+        session(['cart' => $cart]);
+
+        return back()->with('success', 'Produk berhasil dihapus dari keranjang.');
+    }
+
+    public function batal_produk($product_id)
+    {
+        if(!(session()->has('is_user'))) {
+            return redirect()->to('login')->with('info-auth', 'Silakan login terlebih dahulu sebelum melakukan pemesanan.');
+        }
+
+        if (session()->has('cart')) {
+            $cartSession = session()->get('cart');
+
+            if (is_array($cartSession)) {
+                $cartSession = array_filter($cartSession, fn($id) => $id != $product_id);
+
+                session()->put('cart', array_values($cartSession));
+            }
+        }
+
+        return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang.');
+    }
+
+    public function getJson()
+    {
+        $data = ProductsModel::where('product_status', 1)->get();
+        return ProductsResource::collection($data);
+    }
+
+    public function getJsonDetail($product_slug)
+    {
+        $data = ProductsModel::where('product_slug', $product_slug)->first();
+        return new ProductsResource($data);
     }
 }

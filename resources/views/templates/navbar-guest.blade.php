@@ -10,16 +10,34 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item mx-1 my-1 bg-clr1 d-flex align-items-center justify-content-center rounded">
           <a class="nav-link text-clr3 td-none fw-bold" href="{{ url('') }}" style="width:100px;">
-            <div class="d-flex justify-content-center bg-clr3 text-clr1 mt-2 pt-1 rounded"><i class="fas fa-home fsz-22 mb-1"></i></div>
+            <hr>
+            <div class="d-flex justify-content-center mt-2 pt-1 rounded he-35"><i class="fas fa-home fsz-22 mb-1"></i></div>
             <div class="m-0 fw-bold text-center">Dashboard</div>
           </a>
         </li>
         <li class="nav-item mx-1 my-1 bg-clr1 d-flex align-items-center justify-content-center rounded">
           <a class="nav-link text-clr3 td-none fw-bold m-0" href="{{ url('menu') }}" style="width:100px;">
-            <div class="d-flex justify-content-center bg-clr3 text-clr1 mt-2 pt-1 rounded"><i class="fas fa-mug-hot fsz-22 mb-1"></i></div>
+            <hr>
+            <div class="d-flex justify-content-center mt-2 pt-1 rounded he-35"><i class="fas fa-mug-hot fsz-22 mb-1"></i></div>
             <div class="m-0 fw-bold text-center">Menu</div>
           </a>
         </li>
+        @if(session()->has('is_user'))
+        <li class="nav-item mx-1 my-1 bg-clr5 d-flex align-items-center justify-content-center rounded">
+          <a class="nav-link text-clr3 td-none fw-bold m-0" href="{{ url('pesanan') }}" style="width:100px;">
+            <hr>
+            <div class="d-flex justify-content-center mt-2 pt-1 rounded he-35"><i class="fas fa-print fsz-22 mb-1"></i></div>
+            <div class="m-0 fw-bold text-center">Pesanan</div>
+          </a>
+        </li>
+        <li class="nav-item mx-1 my-1 bg-clr5 d-flex align-items-center justify-content-center rounded">
+          <a class="nav-link text-clr3 td-none fw-bold m-0" href="{{ url('riwayat') }}" style="width:100px;">
+            <hr>
+            <div class="d-flex justify-content-center mt-2 pt-1 rounded he-35"><i class="fas fa-list-alt fsz-22 mb-1"></i></div>
+            <div class="m-0 fw-bold text-center">Riwayat</div>
+          </a>
+        </li>
+        @endif
       </ul>
       @if($status !== 'menu')
       <form class="d-flex mt-4 mt-lg-0" role="search" action="{{ url('menu') }}">
