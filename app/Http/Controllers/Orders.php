@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Logic;
-
+use App\Http\Resources\OrdersResource;
 use App\Models\ProductsModel;
 use App\Models\OrdersModel;
 use App\Models\OrdersDetailModel;
@@ -28,7 +28,7 @@ class Orders extends Controller
         $productsData = $productsData->get();
     
         $cart = null;
-        $total_price = 0;
+        $total_price = 0; 
         if (session()->has('cart')) {
             $cartSession = session()->get('cart');
         
@@ -69,5 +69,12 @@ class Orders extends Controller
         }
 
         return redirect()->to('pesanan');
+    }
+
+    public function getJson()
+    {
+        $data = OrdersModel::where('order_status', 0)->with(['details.product'])->get();
+        return OrdersResource::collection($data);
+        // return $data; 
     }
 }

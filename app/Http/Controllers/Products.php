@@ -9,6 +9,8 @@ use App\Models\ProductsModel;
 use App\Models\OrdersModel;
 use App\Models\OrdersDetailModel;
 
+use App\Http\Resources\ProductResource;
+
 use Illuminate\Support\Str;
 
 use Illuminate\Database\Query\Builder;
@@ -52,9 +54,9 @@ class Products extends Controller
 
         $data = [
             'product_id' => $logic->generateUniqueId('products', 'product_id'),
-            'product_name' => $request->product_name,
+            'product_name' => $request->product_name, //
             'product_slug' => Str::slug($request->product_name),
-            'product_price' => $request->product_price,
+            'product_price' => $request->product_price, //
             'product_photo' => $photoPath,
             'product_status' => 1 
         ];
@@ -193,6 +195,6 @@ class Products extends Controller
     public function getJsonDetail($product_slug)
     {
         $data = ProductsModel::where('product_slug', $product_slug)->first();
-        return new ProductsResource($data);
+        return new ProductResource($data); 
     }
 }

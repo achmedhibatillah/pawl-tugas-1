@@ -97,6 +97,8 @@ class Home extends Controller
         ->with(['details.product'])
         ->get();
 
+        dd($ordersData);
+
         return
         view('templates/header') . 
         view('templates/navbar-guest', $data) .
