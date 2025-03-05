@@ -74,7 +74,14 @@ class Orders extends Controller
     public function getJson()
     {
         $data = OrdersModel::where('order_status', 0)->with(['details.product'])->get();
-        return OrdersResource::collection($data);
-        // return $data; 
+        // return OrdersResource::collection($data);
+        return $data; 
+    }
+
+    public function getJsonDetail($order_id)
+    {
+        $data = OrdersModel::where('order_id', $order_id)->with(['details.product'])->first();
+        // return OrdersResource::collection($data);
+        return $data; 
     }
 }

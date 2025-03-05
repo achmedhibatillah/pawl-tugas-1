@@ -11,9 +11,7 @@ Route::get('/user', function (Request $request) {
 
 Route::get('menu', [Products::class, 'getJson']);
 Route::get('menu-detail/{slug}', [Products::class, 'getJsonDetail']);
-
+Route::post('add-menu', [Products::class, 'api_add']);
+Route::put('update-menu', [Products::class, 'api_update']);
+Route::delete('delete-menu', [Products::class, 'api_delete']);
 Route::get('orders', [Orders::class, 'getJson']);
-
-Route::post('add-menu', [Products::class, 'add']);
-
-Route::delete('del-menu', [Products::class, 'delete']);

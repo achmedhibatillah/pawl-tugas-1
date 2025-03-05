@@ -86,29 +86,24 @@ class Products extends Controller
             'product_photo.max' => 'Ukuran gambar maksimal 2MB.',
         ]);
     
-        // Ambil data produk dari database
         $product = ProductsModel::where('product_id', $request->product_id)->first();
         if (!$product) {
             return redirect()->back()->with('error', 'Produk tidak ditemukan.');
         }
     
-        // Cek apakah ada perubahan nama untuk slug
         $slug = ($product->product_name === $request->product_name) ? $product->product_slug : Str::slug($request->product_name);
     
-        // Jika ada file baru yang diupload
         if ($request->hasFile('product_photo')) {
-            // Hapus file lama jika ada
             if ($product->product_photo && file_exists(public_path($product->product_photo))) {
                 unlink(public_path($product->product_photo));
             }
     
-            // Simpan file baru
             $file = $request->file('product_photo');
             $fileName = time() . '-' . Str::slug($request->product_name) . '.' . $file->getClientOriginalExtension();
             $filePath = 'uploads/product/' . $fileName;
             $file->move(public_path('uploads/product'), $fileName);
         } else {
-            $filePath = $product->product_photo; // Gunakan foto lama jika tidak ada yang diunggah
+            $filePath = $product->product_photo;
         }
     
         $product->update([
@@ -196,5 +191,60 @@ class Products extends Controller
     {
         $data = ProductsModel::where('product_slug', $product_slug)->first();
         return new ProductResource($data); 
+    }
+
+    public function api_add(Request $request)
+    {
+        $logic = $this->logic;
+        $data = [
+            'product_id' => $logic->generateUniqueId('products', 'product_id'),
+            'product_name' => $request->product_name,
+            'product_slug' => Str::slug($request->product_name),
+            'product_price' => $request->product_price,
+            'product_photo' => 'ditambahkan-melalui-api',
+            'product_status' => 1  
+        ];
+
+        ProductsModel::create($data);
+
+        return [
+            'Pesan' => 'POST: Berhasil menambah produk dengan ID #' . $data['product_id'] . '.',
+            'Data Baru' => $data
+        ];
+    }
+
+    public function api_update(Request $request)
+    {
+        $product = ProductsModel::where('product_id', $request->product_id)->first();
+        if (!$product) {
+            return ['Pesan' => 'PUT: Produk dengan ID #' . $request->product_id . ' tidak ditemukan.'];
+        }
+    
+        $slug = ($product->product_name === $request->product_name) ? $product->product_slug : Str::slug($request->product_name);
+    
+        $data = [
+            'product_name' => $request->product_name,
+            'product_slug' => $slug,
+            'product_price' => $request->product_price
+        ];
+
+        $product->update($data);
+
+        return [
+            'Pesan' => 'PUT: Produk dengan ID #' . $request->product_id . ' berhasil diperbarui.',
+            'Data Lama' => $product, 
+            'Data Diperbarui' => $data];
+    }
+
+    public function api_delete(Request $request)
+    {
+        $product = ProductsModel::where('product_id', $request->product_id)->first();
+        if (!$product) {
+            return ['Pesan' => 'DELETE: Produk dengan ID #' . $request->product_id . ' tidak ditemukan.'];
+        }
+
+        ProductsModel::where('product_id', $request->product_id)->delete();
+
+        return ['Pesan' => 'DELETE: Produk dengan ID #' . $request->product_id . ' berhasil dihapus.'];        
     }
 }
